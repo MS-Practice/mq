@@ -31,7 +31,7 @@ namespace MQ.EasyNetQ.Customer
                 .UseAutoSubscriber("mq_easynet_perfix");
             services.AddControllers();
 
-            services.AddTransient<UserMessageHandler>();
+            services.AddSubscriptionServices(); 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

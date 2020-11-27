@@ -14,6 +14,12 @@ namespace MQ.EasyNetQ
         {
             var subscriber = app.ApplicationServices.GetService<AutoSubscriber>();
             subscriber.Subscribe(assemblies);
+
+            var requests = app.ApplicationServices.GetServices<IResponder>();
+            foreach (var request in requests)
+            {
+                request.Subscribe();
+            }
         }
     }
 }

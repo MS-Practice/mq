@@ -9,6 +9,7 @@ using EasyNetQ.AutoSubscribe;
 using EasyNetQ.Consumer;
 using MQ.Shared.Messages;
 using MQ.Shared.RabbitMQ;
+using MQ.Shared.RequestResponses;
 
 namespace MQ.EasyNetQ.Customer.MessageHandlers
 {
