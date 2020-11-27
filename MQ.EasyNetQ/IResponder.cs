@@ -12,11 +12,6 @@ namespace MQ.EasyNetQ
         void Subscribe();
     }
 
-    public interface IResponder<in TRequest,out TResponse>
-    {
-
-    }
-
     public abstract class ResponderBase : IResponder
     {
         private readonly IBus _bus;

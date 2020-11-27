@@ -24,6 +24,7 @@ namespace MQ.EasyNetQ.Customer.RequestHandlers
         private CreateUserReponse Response(CreateUserRequest createUser)
         {
             var response = new CreateUserReponse(1, "430602111366523336");
+            throw new NotSupportedException();
             Logger.LogInformation($"接收消息：{System.Text.Json.JsonSerializer.Serialize(createUser)} 时间:{DateTimeOffset.Now}{Environment.NewLine}响应消息:{System.Text.Json.JsonSerializer.Serialize(response)}");
             return response;
         }

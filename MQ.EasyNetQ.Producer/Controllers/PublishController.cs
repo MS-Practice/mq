@@ -1,5 +1,7 @@
 ﻿using EasyNetQ;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using MQ.Shared.Messages;
 using MQ.Shared.RabbitMQ;
 using MQ.Shared.RequestResponses;
@@ -15,14 +17,22 @@ namespace MQ.EasyNetQ.Producer.Controllers
     public class PublishController : ControllerBase
     {
         private readonly IBus _bus;
-        public PublishController(IBus bus)
+        private ILogger _logger;
+        public ILogger Logger
+        {
+            get { return _logger ??= NullLogger.Instance; }
+            set { _logger = value; }
+        }
+
+        public PublishController(IBus bus, ILoggerFactory loggerFactory)
         {
             _bus = bus;
+            _logger = loggerFactory.CreateLogger<PublishController>();
         }
         [HttpPost("user/create")]
         public async Task<bool> CreateUser([FromBody] CreateUserMessage createUser)
         {
-            await _bus.PubSub.PublishAsync(createUser,topic:Consts.Topic.User);
+            await _bus.PubSub.PublishAsync(createUser, topic: Consts.Topic.User);
             return true;
         }
 
@@ -30,6 +40,29 @@ namespace MQ.EasyNetQ.Producer.Controllers
         public async Task<CreateUserReponse> CreateUser([FromBody] CreateUserRequest createUser)
         {
             return await _bus.Rpc.RequestAsync<CreateUserRequest, CreateUserReponse>(createUser);
+        }
+
+        [HttpPost("user/create/ack")]
+        public async Task<bool> CreateUserAck([FromBody] CreateUserMessage message)
+        {
+            await _bus.PubSub.PublishAsync(message, topic: Consts.Topic.User)
+                .ContinueWith(task =>
+                {
+                    if (task.IsCompleted && !task.IsCompletedSuccessfully)
+                    {
+                        Logger.LogInformation($"消息 {message.UserName} 推送 broken 失败");
+                    }
+                    if (task.IsCompletedSuccessfully)
+                    {
+                        Logger.LogInformation($"消息 {message.UserName} 推送确认");
+                    }
+                    if (task.IsFaulted)
+                    {
+                        Logger.LogError($"系统错误:{task.Exception.Message}");
+                    }
+                });
+
+            return true;
         }
 
         [HttpPost("product/request/create")]

@@ -25,6 +25,7 @@ namespace MQ.EasyNetQ.Customer.MessageHandlers
         public async Task ConsumeAsync(CreateUserMessage message, CancellationToken cancellationToken = default)
         {
             Logger.LogInformation($"接收消息：{JsonSerializer.Serialize(message)} 时间:{DateTimeOffset.Now}");
+            //throw new NotSupportedException();
             await Task.Yield();
         }
     }

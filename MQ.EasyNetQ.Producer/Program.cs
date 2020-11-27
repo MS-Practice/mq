@@ -39,6 +39,11 @@ namespace MQ.EasyNetQ.Producer
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureLogging(config=> {
+                    config.ClearProviders();
+                    config.SetMinimumLevel(LogLevel.Information);
+                    config.AddConsole();
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>()
