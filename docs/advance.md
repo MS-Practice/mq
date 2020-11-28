@@ -51,7 +51,7 @@ advancedBus.QueueDeclare();
 
 绑定队列到交换机上：
 
-```
+```c#
 var queue = advancedBus.QueueDeclare("my.queue");
 var exchange = advancedBus.ExchangeDeclare("my.exchange", ExchangeType.Topic);
 var binding = advancedBus.Bind(exchange, queue, "A.*");
@@ -59,7 +59,7 @@ var binding = advancedBus.Bind(exchange, queue, "A.*");
 
 相同的队列和交换机可以指定多个绑定
 
-```
+```c#
 var queue = advancedBus.QueueDeclare("my.queue");
 var exchange = advancedBus.ExchangeDeclare("my.exchange", ExchangeType.Topic);
 advancedBus.Bind(exchange, queue, "A.B");
@@ -68,7 +68,7 @@ advancedBus.Bind(exchange, queue, "A.C");
 
 也可以在交换机之间指定绑定
 
-```
+```c#
 var sourceExchange = advancedBus.ExchangeDeclare("my.exchange.1", ExchangeType.Topic);
 var destinationExchange = advancedBus.ExchangeDeclare("my.exchange.2", ExchangeType.Topic);
 var queue = advancedBus.QueueDeclare("my.queue");
@@ -83,29 +83,55 @@ advancedBus.Bind(destinationExchange, queue, "A.C");
 
 利用 `Message` 将你的消息包装进去
 
-```
+```c#
 var myMessage = new MyMessage { Text = "Hello World" };
 var message = new Message<MyMessage>(myMessage);
 ```
 
 然后 message 允许你访问 AMQP 的基本属性：
 
-```
+```c#
 message.Properties.AppId = "my_app_id";
 message.Properties.ReplyTo = "my_reply_queue";
 ```
 
 最后发布消息
 
-```
+```c#
 bus.Publish(Exchange.GetDefault(), queueName, false, false, message);
 ```
 
 `Publish` 重载方法支持你传递 EasyNetQ 消息序列化以及创建你自己的字节数组消息：
 
-```
+```c#
 var properties = new MessageProperties();
 var body = Encoding.UTF8.GetBytes("Hello World!");
 bus.Publish(Exchange.GetDefault(), queueName, false, false, properties, body);
 ```
 
+## 消费
+
+`IAdvancedBus.IAdvancedBus` 方法来从队列中消费消息
+
+```c#
+IDisposable Consume(IQueue queue, MessageHandler onMessage, Action<IConsumerConfiguration> configure);
+```
+
+onMessage 是一个接受字节数组，消息附属信息的委托方法，用来处理消息递送
+
+```c#
+delegate Task<AckStrategy> MessageHandler(byte[] body, MessageProperties properties, MessageReceivedInfo receivedInfo, CancellationToken cancellationToken);
+```
+
+下面是一个消费一个从队列的原始信息字节：
+
+```
+var queue = advancedBus.QueueDeclare("my_queue");
+advancedBus.Consume(queue, (body, properties, info) => Task.Factory.StartNew(() =>
+    {
+        var message = Encoding.UTF8.GetString(body);
+        Console.WriteLine("Got message: '{0}'", message);
+    }));
+```
+
+## 
