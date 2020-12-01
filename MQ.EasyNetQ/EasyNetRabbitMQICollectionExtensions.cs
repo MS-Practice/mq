@@ -32,6 +32,9 @@ namespace MQ.EasyNetQ
             bus.Advanced.Consume(queue,(body,properties,info)=>{
                 string json = UTF8Encoding.UTF8.GetString(body);
                 var obj = System.Text.Json.JsonSerializer.Deserialize<CreateUserMessage>(json);
+                // better for performance
+                var obj2 = System.Text.Json.JsonSerializer.Deserialize<CreateUserMessage>(new ReadOnlySpan<byte>(body));
+
             });
 
             // var existingQueue = bus.Advanced.QueueDeclare("platform.queue.user", true, false, true);
