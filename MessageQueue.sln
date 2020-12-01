@@ -19,6 +19,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MQ.EasyNetQ.Producer", "MQ.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MQ.EasyNetQ", "MQ.EasyNetQ\MQ.EasyNetQ.csproj", "{3B1A4504-4EBE-464D-B5E7-18F6283946E0}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasyNetQ", "..\..\EasyNetQ\Source\EasyNetQ\EasyNetQ.csproj", "{69BF6089-BD84-448C-82E0-164F4140677D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RabbitMQ.Client", "..\..\rabbitmq-dotnet-client\projects\RabbitMQ.Client\RabbitMQ.Client.csproj", "{E150F50D-99EA-4906-B757-E292CD903B0A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +61,14 @@ Global
 		{3B1A4504-4EBE-464D-B5E7-18F6283946E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B1A4504-4EBE-464D-B5E7-18F6283946E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B1A4504-4EBE-464D-B5E7-18F6283946E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69BF6089-BD84-448C-82E0-164F4140677D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69BF6089-BD84-448C-82E0-164F4140677D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69BF6089-BD84-448C-82E0-164F4140677D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69BF6089-BD84-448C-82E0-164F4140677D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E150F50D-99EA-4906-B757-E292CD903B0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E150F50D-99EA-4906-B757-E292CD903B0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E150F50D-99EA-4906-B757-E292CD903B0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E150F50D-99EA-4906-B757-E292CD903B0A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

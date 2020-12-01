@@ -36,6 +36,15 @@ namespace MQ.EasyNetQ.Producer.Controllers
             return true;
         }
 
+        [HttpPost("user/create/queue")]
+        public async Task<bool> CreateUserQueue([FromBody] CreateUserMessage createUser)
+        {
+            var queue = await _bus.Advanced.QueueDeclareAsync("platform.queue.createuser", true, false, true);
+            //_bus.Advanced.PublishAsync()
+            //await _bus.PubSub.PublishAsync(createUser, topic: Consts.Topic.User);
+            return true;
+        }
+
         [HttpPost("user/request/create")]
         public async Task<CreateUserReponse> CreateUser([FromBody] CreateUserRequest createUser)
         {

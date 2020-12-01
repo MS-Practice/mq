@@ -13,6 +13,7 @@ namespace MQ.EasyNetQ.Customer
         public static void AddSubscriptionServices(this IServiceCollection services)
         {
             services.AddTransient<UserMessageHandler>();
+            services.AddTransient<UserMessageFromGolangHandler>();
             services.AddTransient<IResponder, CreateUserRequestHandler>();
             services.AddTransient<IResponder, CreateProductRequestHandler>();
         }
