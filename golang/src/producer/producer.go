@@ -1,8 +1,7 @@
 package main
 
 import (
-	"bytes"
-	"encoding/gob"
+	"encoding/json"
 	"gomq/src"
 	"log"
 	"time"
@@ -26,7 +25,7 @@ func main() {
 	// 申明交换机
 	declareExchange(ch)
 	// 绑定交换机
-	err = ch.QueueBind(queue.Name, queue.Name, "MQ.Shared.Messages.CreateUserMessage, MQ.Shared", false, nil)
+	err = ch.QueueBind(queue.Name, queue.Name, "go.exchange", false, nil)
 	failOnError(err, "绑定队列失败")
 	// 发送消息
 	err = publish(ch, queue, &src.CreateUserMessage{"marsonshine", 27, true, "marson@163.com", time.Now()})
@@ -34,11 +33,12 @@ func main() {
 }
 
 func publish(ch *amqp.Channel, queue amqp.Queue, body interface{}) error {
+	buffer, err := json.Marshal(body)
+	// var network bytes.Buffer
 
-	var network bytes.Buffer
-	gob.Register(src.CreateUserMessage{})
-	enc := gob.NewEncoder(&network)
-	err := enc.Encode(body)
+	// gob.Register(src.CreateUserMessage{})
+	// enc := gob.NewEncoder(&network)
+	// err := enc.Encode(body)
 	if err != nil {
 		return err
 	}
@@ -49,8 +49,8 @@ func publish(ch *amqp.Channel, queue amqp.Queue, body interface{}) error {
 		false,
 		false,
 		amqp.Publishing{
-			ContentType: "text/plain",
-			Body:        network.Bytes(),
+			ContentType: "applicaton/json",
+			Body:        buffer,
 		})
 	log.Printf("[x] 发送消息 %s", body)
 	return err
@@ -58,7 +58,7 @@ func publish(ch *amqp.Channel, queue amqp.Queue, body interface{}) error {
 
 func declareQueue(ch *amqp.Channel) (amqp.Queue, error) {
 	queue, err := ch.QueueDeclare(
-		string(src.UserQueueString),
+		"go.queue",
 		true,
 		false,
 		false,
@@ -68,7 +68,7 @@ func declareQueue(ch *amqp.Channel) (amqp.Queue, error) {
 	return queue, err
 }
 func declareExchange(ch *amqp.Channel) {
-	err := ch.ExchangeDeclare("MQ.Shared.Messages.CreateUserMessage, MQ.Shared", "topic", true, false, false, false, nil)
+	err := ch.ExchangeDeclare("go.exchange", "direct", true, false, false, false, nil)
 	failOnError(err, "Failed to declare an exchange")
 }
 func failOnError(err error, msg string) {

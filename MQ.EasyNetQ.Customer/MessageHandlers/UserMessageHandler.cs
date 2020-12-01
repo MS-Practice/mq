@@ -29,22 +29,4 @@ namespace MQ.EasyNetQ.Customer.MessageHandlers
             await Task.Yield();
         }
     }
-
-    public class UserMessageFromGolangHandler:IConsumeAsync<CreateUserMessage>
-    {
-        private readonly ILogger logger;
-        public UserMessageFromGolangHandler(ILoggerFactory loggerFactory)
-        {
-            logger = loggerFactory.CreateLogger<UserMessageFromGolangHandler>(); ;
-        }
-
-        public ILogger Logger => logger;
-        [ForTopic(Consts.Queue.User)]
-        public async Task ConsumeAsync(CreateUserMessage message, CancellationToken cancellationToken = default)
-        {
-            Logger.LogInformation($"接收来自 Golang 发出的消息：{JsonSerializer.Serialize(message)} 时间:{DateTimeOffset.Now}");
-            //throw new NotSupportedException();
-            await Task.Yield();
-        }
-    }
 }
