@@ -20,6 +20,12 @@ namespace MQ.EasyNetQ
             {
                 request.Subscribe();
             }
+
+            var bootstrappers = app.ApplicationServices.GetServices<ISubscriberBootstrapper>();
+            foreach (var strapper in bootstrappers)
+            {
+                strapper.Start();
+            }
         }
     }
 }

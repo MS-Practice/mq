@@ -17,5 +17,16 @@ namespace MQ.Shared.RabbitMQ
             internal const string Prefix = "platform.queue";
             public const string User = Prefix + ".user";
         }
+
+        public class Exchange
+        {
+            internal const string Prefix = "platform.exchange";
+            public const string User = Prefix + ".user";
+        }
+
+        public class RouterKeys
+        {
+            public const string CreateUser = "go.create.user";
+        }
     }
 }

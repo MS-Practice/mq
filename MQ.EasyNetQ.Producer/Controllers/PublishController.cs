@@ -73,7 +73,6 @@ namespace MQ.EasyNetQ.Producer.Controllers
 
             return true;
         }
-
         [HttpPost("product/request/create")]
         public async Task<CreateProductResponse> CreateUser([FromBody] CreateProductRequest createProduct)
         {

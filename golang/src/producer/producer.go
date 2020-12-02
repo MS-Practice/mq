@@ -25,7 +25,7 @@ func main() {
 	// 申明交换机
 	declareExchange(ch)
 	// 绑定交换机
-	err = ch.QueueBind(queue.Name, queue.Name, "go.exchange", false, nil)
+	err = ch.QueueBind(queue.Name, "go.create.user", "platform.exchange.user", false, nil)
 	failOnError(err, "绑定队列失败")
 	// 发送消息
 	err = publish(ch, queue, &src.CreateUserMessage{"marsonshine", 27, true, "marson@163.com", time.Now()})
@@ -58,7 +58,7 @@ func publish(ch *amqp.Channel, queue amqp.Queue, body interface{}) error {
 
 func declareQueue(ch *amqp.Channel) (amqp.Queue, error) {
 	queue, err := ch.QueueDeclare(
-		"go.queue",
+		"platform.queue.user",
 		true,
 		false,
 		false,
@@ -68,7 +68,7 @@ func declareQueue(ch *amqp.Channel) (amqp.Queue, error) {
 	return queue, err
 }
 func declareExchange(ch *amqp.Channel) {
-	err := ch.ExchangeDeclare("go.exchange", "direct", true, false, false, false, nil)
+	err := ch.ExchangeDeclare("platform.exchange.user", "direct", true, false, false, false, nil)
 	failOnError(err, "Failed to declare an exchange")
 }
 func failOnError(err error, msg string) {

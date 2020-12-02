@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using MQ.EasyNetQ.Customer.Features;
 using MQ.EasyNetQ.Customer.MessageHandlers;
 using MQ.EasyNetQ.Customer.RequestHandlers;
 using System;
@@ -15,6 +16,7 @@ namespace MQ.EasyNetQ.Customer
             services.AddTransient<UserMessageHandler>();
             services.AddTransient<IResponder, CreateUserRequestHandler>();
             services.AddTransient<IResponder, CreateProductRequestHandler>();
+            services.AddTransient<ISubscriberBootstrapper, CreateUserMessageFromGoStrapper>();
         }
     }
 }

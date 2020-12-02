@@ -21,30 +21,6 @@ namespace MQ.EasyNetQ
             connectionString.Append("publisherConfirms=true");
 
             var bus = RabbitHutch.CreateBus(connectionString);
-            // TODO: 待重构，最佳实践应该类似于autosubscribe以及respondor一样的编码方式
-            // 利用 Naming conventions
-            // https://github.com/EasyNetQ/EasyNetQ/wiki/Controlling-Queue-names
-            // https://www.mariuszwojcik.com/tell-easynetq-bus-what-queue-name-to-use-for-your-messages/
-            var exchange = bus.Advanced.ExchangeDeclare("go.exchange",ExchangeType.Direct,true);
-            var queue = bus.Advanced.QueueDeclare("go.queue",true,false,false);
-            bus.Advanced.Bind(exchange,queue,"go.queue");
-
-            bus.Advanced.Consume(queue,(body,properties,info)=>{
-                string json = UTF8Encoding.UTF8.GetString(body);
-                var obj = System.Text.Json.JsonSerializer.Deserialize<CreateUserMessage>(json);
-                // better for performance
-                var obj2 = System.Text.Json.JsonSerializer.Deserialize<CreateUserMessage>(new ReadOnlySpan<byte>(body));
-
-            });
-
-            // var existingQueue = bus.Advanced.QueueDeclare("platform.queue.user", true, false, true);
-
-            // bus.Advanced.Consume<CreateUserMessage>(existingQueue, (msg, info) =>
-            // {
-            //     var user = msg.Body;
-            //     Console.WriteLine($"接收来自 Golang 发出的消息：{System.Text.Json.JsonSerializer.Serialize(user)} 时间:{DateTimeOffset.Now}");
-            // });
-
             services.AddSingleton(bus);
             return new RabbitMQEasyNetBuilder(services);
         }
