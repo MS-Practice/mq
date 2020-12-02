@@ -16,7 +16,7 @@ namespace MQ.EasyNetQ.Customer
             services.AddTransient<UserMessageHandler>();
             services.AddTransient<IResponder, CreateUserRequestHandler>();
             services.AddTransient<IResponder, CreateProductRequestHandler>();
-            services.AddTransient<ISubscriberBootstrapper, CreateUserMessageFromGoStrapper>();
+            services.AddTransient<IAdvancedSubscriber, CreateUserMessageFromGoStrapper>();
         }
     }
 }

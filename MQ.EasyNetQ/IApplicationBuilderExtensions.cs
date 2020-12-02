@@ -21,10 +21,10 @@ namespace MQ.EasyNetQ
                 request.Subscribe();
             }
 
-            var bootstrappers = app.ApplicationServices.GetServices<ISubscriberBootstrapper>();
-            foreach (var strapper in bootstrappers)
+            var advancedSubscribers = app.ApplicationServices.GetServices<IAdvancedSubscriber>();
+            foreach (var advanced in advancedSubscribers)
             {
-                strapper.Start();
+                advanced.Subscribe();
             }
         }
     }

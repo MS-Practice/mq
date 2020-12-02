@@ -11,14 +11,14 @@ using System.Threading.Tasks;
 
 namespace MQ.EasyNetQ.Customer.Features
 {
-    public class CreateUserMessageFromGoStrapper : SubscriberBootstrapperBase, ISubscriberBootstrapper,IAsyncSubscriberBootstrapper
+    public class CreateUserMessageFromGoStrapper : SubscriberBootstrapperBase, IAdvancedSubscriber, IAsyncAdvancedSubscriber
     {
         public CreateUserMessageFromGoStrapper(IBus bus, ILoggerFactory loggerFactory) : base(bus)
         {
             Logger = loggerFactory.CreateLogger<CreateUserMessageFromGoStrapper>();
         }
 
-        public override async Task StartAsync()
+        public override async Task SubscribeAsync()
         {
             var exchange = await ExchangeDeclareAsync();
             var queue = await QueueDeclareAsync();

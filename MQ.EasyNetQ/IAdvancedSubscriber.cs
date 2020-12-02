@@ -5,17 +5,17 @@ using System.Threading.Tasks;
 
 namespace MQ.EasyNetQ
 {
-    public interface ISubscriberBootstrapper
+    public interface IAdvancedSubscriber
     {
-        void Start();
+        void Subscribe();
     }
 
-    public interface IAsyncSubscriberBootstrapper
+    public interface IAsyncAdvancedSubscriber
     {
-        Task StartAsync();
+        Task SubscribeAsync();
     }
 
-    public abstract class SubscriberBootstrapperBase : ISubscriberBootstrapper, IAsyncSubscriberBootstrapper
+    public abstract class SubscriberBootstrapperBase : IAdvancedSubscriber, IAsyncAdvancedSubscriber
     {
         private readonly IBus _bus;
         private ILogger _logger;
@@ -33,11 +33,11 @@ namespace MQ.EasyNetQ
             _bus = bus;
         }
 
-        public void Start()
+        public void Subscribe()
         {
-            StartAsync().GetAwaiter().GetResult();
+            SubscribeAsync().GetAwaiter().GetResult();
         }
 
-        public abstract Task StartAsync();
+        public abstract Task SubscribeAsync();
     }
 }
